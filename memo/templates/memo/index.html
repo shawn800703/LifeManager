@@ -12,7 +12,7 @@
 .body{
     /* border:1px red solid; */
     width:100%;
-    height:90%;
+    height:85%;
     position:fixed;
     overflow-x: auto; 
     display: flex;
@@ -51,8 +51,8 @@ a{
     box-shadow: 0 1px 0 rgba(9,45,66,.25);
     display: block;
     padding:5px;
-    width: 390px;
-    margin-bottom: 8px;
+    width: 100%;
+    margin-bottom: 5px;
 }
 .blockTi{
     /* border:1px red solid; */
@@ -208,7 +208,7 @@ textarea{
                                 <div style="text-align: right">
                                     <p>{{ memo.expiredate }}</p>
                                     <input name='update' type="button" class="btn btn-light btn-sm" value='修改'>
-                                    <a href='/memo/delete/{{ memo.memoID }}'><input type="button" class="btn btn-light btn-sm" value='刪除'></a>
+                                    <input id='delete{{ memo.memoID }}' name='delete' type="button" class="btn btn-light btn-sm" value='刪除'>
                                 </div>
                             </div>                        
                         </div>
@@ -241,17 +241,17 @@ textarea{
                         <form method="POST">
                             {% csrf_token %}
                             <div>
-                                <input type='text' name='memoTitle' style='width:100%'>
+                                <input type='text' name='createTit' style='width:100%'>
                             </div>
                             <div>
-                                <textarea style='width:100%' name='memoContent'></textarea>
+                                <textarea style='width:100%' name='createCon'></textarea>
                             </div>
                             <div>
                                 <label>預計完成日期</label>
-                                <input type="date" name='expiredate' value="{{ memo.expiredate|date:'Y-m-d' }}">
+                                <input type="date" name='createED'>
                             </div>
                             <div style='text-align: right'>
-                                <input type='submit' class="btn btn-light btn-sm" value='送出'>
+                                <input id='createbtn' type='submit' class="btn btn-light btn-sm" value='送出'>
                             </div>
                         </form>
                     </div>              
@@ -279,7 +279,7 @@ textarea{
                                 <div style="text-align: right">
                                     <p>{{ memo.expiredate }}</p>
                                     <input name='update' type="button" class="btn btn-light btn-sm" value='修改'>
-                                    <a href='/memo/delete/{{ memo.memoID }}'><input type="button" class="btn btn-light btn-sm" value='刪除'></a>
+                                    <input id='delete{{ memo.memoID }}' name='delete' type="button" class="btn btn-light btn-sm" value='刪除'>
                                 </div>
                             </div>
                         </div>
@@ -330,7 +330,7 @@ textarea{
                             <div style="text-align: right">
                                 <p>{{ memo.expiredate }}</p>
                                 <input name='update' type="button" class="btn btn-light btn-sm" value='修改'>
-                                <a href='/memo/delete/{{ memo.memoID }}'><input type="button" class="btn btn-light btn-sm" value='刪除'></a>
+                                <input id='delete{{ memo.memoID }}' name='delete' type="button" class="btn btn-light btn-sm" value='刪除'>
                             </div>
                         </div>
                     </div>
@@ -363,10 +363,9 @@ textarea{
 
 </div>
 {% endblock %}
-<!-- <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script> -->
+
 {% block scripts %}
 <script src="/static/scripts/jquery-3.3.1.min.js"></script>
-<!-- <script src="/static/scripts/jquery-ui.min.js"></script> -->
 <script>
     $(function(){
     //出入允许拖拽节点的父容器，一般是ul外层的容器
@@ -444,6 +443,7 @@ textarea{
         //3.修改克隆节点的坐标，实现跟随鼠标进行移动的效果
         $(drag.tmp_elm).css({
           'position' : 'fixed',
+          'width':'392px',
           'left' : drag._x,
           'top' : drag._y,
           'background-color' : '#d2e9ff'
@@ -533,14 +533,9 @@ textarea{
                         data:{'memoState':st}
                     }).done(function(datas){
                         var cb = $(drag.old_elm).parent('.cardblock')
-                        console.log(cb)
-                        // console.log(st)
-                        // console.log($('#bc'+st))
                         $('#bc'+st).prepend(cb.clone())
                         cb.remove()
-                        
-
-                        // location.reload()
+                        $(value).css('background-color', '#dfe3e6');
                       });
 
                   }
@@ -567,12 +562,41 @@ textarea{
             $('#iF').find(':text').focus();
 
         })
+        // 新增送出
+        // $('#createbtn').click(function(e){
+        //     cb = $(this).parents('form')
+        //     $.ajax({
+        //         type:'post',
+        //         url:'/api/memorf/',
+        //         data:{'memoTitle':cb.find('input[name="createTit"]').val(),
+        //               'memoContent':cb.find('textarea').val(),
+        //               'memoState':'t',
+        //               'expiredate':cb.find('input[name="createED"]').val()
+        //               }
+        //         })
 
-        // 更新按鈕
+        //     })
+
+        // 修改按鈕
         $('.blockCon').on('mousedown','input[name="update"]',function(e){
             $(this).parents('.cardblock').children('.card').css('display','none')
             $(this).parents('.cardblock').children('.manage').css('display','block')
             e.stopImmediatePropagation();
+        })
+
+        // 刪除按鈕
+        $('.blockCon').on('mousedown','input[name="delete"]',function(e){
+            con = confirm('確認刪除?')
+            if (con){
+                cb = $(this).parents('.cardblock')
+                $.ajax({
+                    type:'delete',
+                    url:'/api/memorf/'+$(this).attr('id').substring(6,)+'/'
+                }).done(function(datas){
+                    cb.remove()                
+                });
+                e.stopImmediatePropagation();
+            }else{e.stopImmediatePropagation();}
         })
 
         
@@ -583,10 +607,7 @@ textarea{
             e.stopImmediatePropagation();
         })
 
-        // 取消表單事件
-        // $('.manage').mousedown(function(e){
-        //     e.stopImmediatePropagation();
-        // })
+
 
         // 搜尋
         $('#searchbtn').on('click',function(){

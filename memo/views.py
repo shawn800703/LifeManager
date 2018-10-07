@@ -12,11 +12,11 @@ def index(request):
     # today = datetime.date.today()
 
     if request.method == 'POST':
-        memoTitle = request.POST['memoTitle']
-        memoContent = request.POST['memoContent']
+        memoTitle = request.POST['createTit']
+        memoContent = request.POST['createCon']
         expiredate = None
-        if request.POST['expiredate']:
-            expiredate = request.POST['expiredate']
+        if request.POST['createED']:
+            expiredate = request.POST['createED']
 
         Memorf.objects.create(memoTitle=memoTitle,memoContent=memoContent,expiredate=expiredate,memoState='t')
         return redirect('/memo')
@@ -35,12 +35,3 @@ def update(request,id):
     memo.save()
     return redirect('/memo')
 
-def delete(request,id):
-    memo = Memorf.objects.get(memoID=id)
-    memo.delete()
-    return redirect('/memo')
-
-def search(request):
-    keyword = request.GET('keyword')
-    memos = Memorf.objects.filter(memoTitle__contains=keyword)
-    print(memos)
