@@ -1,0 +1,616 @@
+{% extends "base.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+<style>
+.searchtext{
+    border-radius: 10px;
+    margin-left: 24px;
+}
+.body{
+    /* border:1px red solid; */
+    width:100%;
+    height:90%;
+    position:fixed;
+    overflow-x: auto; 
+    display: flex;
+    flex-direction: row;
+}
+a{
+    text-decoration: none;
+}
+.mainblock{
+    /* border:1px red solid; */
+    margin:20px;
+    width:400px;
+    min-width: 400px;
+    display:inline-block;
+    /* vertical-align: top; */
+    box-sizing: border-box;
+}
+.inBlock{
+    /* border:1px red solid; */
+    background-color: #dfe3e6;
+    border-radius: 3px;
+    box-sizing: border-box;
+    max-height: 100%;
+    padding:4px;
+    display:flex;
+    flex-direction: column;
+}
+.cardblock{
+    /* border:1px red solid; */
+    width:100%;
+}
+.card{
+    /* border:1px red solid; */
+    background-color: #fff;
+    border-radius: 3px;
+    box-shadow: 0 1px 0 rgba(9,45,66,.25);
+    display: block;
+    padding:5px;
+    width: 390px;
+    margin-bottom: 8px;
+}
+.blockTi{
+    /* border:1px red solid; */
+    padding:0 4px;
+    line-height: 32px;
+    margin:8px 0;
+    width:100%;
+}
+.cardTi{
+    /* border:1px red solid; */
+    cursor:pointer;
+}
+.cardTitle{
+    /* border:1px red solid; */
+    display:inline-block;
+}   
+.blockCon{
+    /* border:1px red solid; */
+    overflow-x:hidden;
+    width:100%;
+    overflow-y: auto;
+}
+.cardCon{
+    display:none;
+}
+.iF{
+    display:none;
+}
+textarea{
+    resize:none;
+}
+.manage{
+    border-radius: 3px;
+    box-shadow: 0 1px 0 rgba(9,45,66,.25);
+    display:none;
+}
+.fas{
+    /* border:1px red solid; */
+    line-height: 24px;
+    float:right;
+}
+#custom-search-form {
+    margin:0;
+    margin-top: 5px;
+    padding: 0;
+}
+
+#custom-search-form .search-query {
+    padding-right: 3px;
+    padding-right: 4px \9;
+    padding-left: 3px;
+    padding-left: 4px \9;
+    /* IE7-8 doesn't have border-radius, so don't indent the padding */
+
+    margin-bottom: 0;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+
+#custom-search-form button {
+    border: 0;
+    background: none;
+    /** belows styles are working good */
+    padding: 2px 5px;
+    margin-top: 2px;
+    position: relative;
+    left: -28px;
+    /* IE7-8 doesn't have border-radius, so don't indent the padding */
+    margin-bottom: 0;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+
+.search-query:focus + button {
+    z-index: 3;   
+}
+</style>
+{% endblock %}
+
+{% block left %}
+        <ul class="sidebar navbar-nav">
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'base:index' %}">
+                    <i class="fa fa-fw fa-home"></i>
+                    <span>首頁</span>
+                </a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'base:about' %}">
+                    <i class="fa fa-fw fa-rocket"></i>
+                    <span>關於</span>
+                </a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'base:contact' %}">
+                    <i class="fa fa-fw fa-phone"></i>
+                    <span>聯絡</span></a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'memo:index' %}">
+                    <i class="fa fa-fw fa-phone"></i>
+                    <span>代辦事項</span></a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="#">
+                    <i class="fa fa-fw fa-phone"></i>
+                    <span>家計簿</span></a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="#">
+                    <i class="fa fa-fw fa-phone"></i>
+                    <span>健康資訊</span></a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="#">
+                    <i class="fa fa-fw fa-phone"></i>
+                    <span>運動管理</span></a>
+            </li>
+        </ul>
+{% endblock %}
+
+{% block main %}
+
+<div class='searchDiv'>
+    <form>
+        <div>
+            <input type="text" class="searchtext" placeholder="Search">
+            <img id='searchbtn'src='/static/images/search.png'>
+        </div>
+    </form>
+</div>
+<div class='body'>
+
+    <div class='mainblock'>
+        <div class='inBlock' id='t'>       
+            <div class='blockTi'>  
+                <span>待辦事項</span>
+                <button id='createCard' style="float:right" type="button" class="btn btn-light btn-sm">新增</button>            
+            </div>
+            
+            <div class='blockCon' id='bct'>
+                {% for memo in memot %}
+                    <div class='cardblock'>
+                        <div class='card' id='card{{ memo.memoID }}'>
+                            <div class='cardTi'>
+                                <p class='cardTitle'>{{ memo.memoTitle }}</p>    
+                                <i class="fas fa-stream"></i>
+                            </div>
+                            <div name='cardContent' class='cardCon'>
+                                <div name='content'>{{ memo.memoContent }}</div>
+                                <div style="text-align: right">
+                                    <p>{{ memo.expiredate }}</p>
+                                    <input name='update' type="button" class="btn btn-light btn-sm" value='修改'>
+                                    <a href='/memo/delete/{{ memo.memoID }}'><input type="button" class="btn btn-light btn-sm" value='刪除'></a>
+                                </div>
+                            </div>                        
+                        </div>
+
+                        <div class='manage'>
+                            <form method='POST' action='/memo/update/{{ memo.memoID }}'>
+                                {% csrf_token %}
+                                <div><input type='text' value='{{ memo.memoTitle }}' name='memoTitle' style='width:100%'></div>
+                                <div><textarea style='width:100%' name='memoContent'>{{ memo.memoContent }}</textarea></div>
+                                <div><select name='memoState'>
+                                        <option value='t' selected>代辦</option>
+                                        <option value='d'>進行中</option>
+                                        <option value='f'>完成</option>
+                                    </select>
+                                    <label>預計完成日期</label>
+                                    <input type="date" name='expiredate' value="{{ memo.expiredate|date:'Y-m-d' }}">
+                                </div>
+
+                                <div style='text-align: right'>
+                                    <input name='cancel' type='button' class='btn btn-light btn-sm' value='取消'>
+                                    <input type='submit' class='btn btn-light btn-sm' value='確認修改'>
+                                </div>
+                            </form>
+                        </div>
+                    </div> 
+                {% endfor %}
+                
+
+                    <div id='iF' class='iF'>
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div>
+                                <input type='text' name='memoTitle' style='width:100%'>
+                            </div>
+                            <div>
+                                <textarea style='width:100%' name='memoContent'></textarea>
+                            </div>
+                            <div>
+                                <label>預計完成日期</label>
+                                <input type="date" name='expiredate' value="{{ memo.expiredate|date:'Y-m-d' }}">
+                            </div>
+                            <div style='text-align: right'>
+                                <input type='submit' class="btn btn-light btn-sm" value='送出'>
+                            </div>
+                        </form>
+                    </div>              
+            </div>
+        </div>        
+    </div>
+
+    <div class='mainblock'>
+        <div class='inBlock' id='d'>
+        
+            <div class='blockTi'>  
+                <span>進行中</span>             
+            </div>
+                
+            <div class='blockCon' id='bcd'>
+                {% for memo in memod %}
+                    <div class='cardblock'>
+                        <div class='card' id='card{{ memo.memoID }}'>
+                            <div class='cardTi'>
+                                <p class='cardTitle'>{{ memo.memoTitle }}</p>
+                                <i class="fas fa-stream"></i>
+                            </div>
+                            <div name='cardContent' class='cardCon'>
+                                <div name='content'>{{ memo.memoContent }}</div>
+                                <div style="text-align: right">
+                                    <p>{{ memo.expiredate }}</p>
+                                    <input name='update' type="button" class="btn btn-light btn-sm" value='修改'>
+                                    <a href='/memo/delete/{{ memo.memoID }}'><input type="button" class="btn btn-light btn-sm" value='刪除'></a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class='manage'>
+                            <form method='POST' action='/memo/update/{{ memo.memoID }}'>
+                                {% csrf_token %}
+                                <div><input type='text' value='{{ memo.memoTitle }}' name='memoTitle' style='width:100%'></div>
+                                <div><textarea style='width:100%' name='memoContent'>{{ memo.memoContent }}</textarea></div>
+                                <div><select name='memoState'>
+                                        <option value='t'>代辦</option>
+                                        <option value='d' selected>進行中</option>
+                                        <option value='f'>完成</option>
+                                    </select>
+                                    <label>預計完成日期</label>
+                                    <input type="date" name='expiredate' value="{{ memo.expiredate|date:'Y-m-d' }}">
+                                </div>
+                                
+                                <div style='text-align: right'>
+                                    <input name='cancel' type='button' class='btn btn-light btn-sm' value='取消'>
+                                    <input type='submit' class='btn btn-light btn-sm' value='確認修改'>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>                            
+         </div>   
+    </div>
+
+    <div class='mainblock'>
+        <div class='inBlock' id='f'>
+        
+            <div class='blockTi'>  
+                <span>已完成</span>          
+            </div>
+                
+            <div class='blockCon' id='bcf'>
+                {% for memo in memof %}
+                <div class='cardblock'>
+                    <div class='card' id='card{{ memo.memoID }}'>
+                        <div class='cardTi'>
+                            <p class='cardTitle'>{{ memo.memoTitle }}</p>
+                            <i class="fas fa-stream"></i>
+                        </div>
+                        <div name='cardContent' class='cardCon'>
+                            <div name='content'>{{ memo.memoContent }}</div>
+                            <div style="text-align: right">
+                                <p>{{ memo.expiredate }}</p>
+                                <input name='update' type="button" class="btn btn-light btn-sm" value='修改'>
+                                <a href='/memo/delete/{{ memo.memoID }}'><input type="button" class="btn btn-light btn-sm" value='刪除'></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class='manage'>
+                        <form method='POST' action='/memo/update/{{ memo.memoID }}'>
+                            {% csrf_token %}
+                            <div><input type='text' value='{{ memo.memoTitle }}' name='memoTitle' style='width:100%'></div>
+                            <div><textarea style='width:100%' name='memoContent'>{{ memo.memoContent }}</textarea></div>
+                            <div><select name='memoState'>
+                                    <option value='t'>代辦</option>
+                                    <option value='d'>進行中</option>
+                                    <option value='f' selected>完成</option>
+                                </select>
+                                <label>預計完成日期</label>
+                                <input type="date" name='expiredate' value="{{ memo.expiredate|date:'Y-m-d' }}">
+                            </div>
+                            <div style='text-align: right'>
+                                <input name='cancel' type='button' class='btn btn-light btn-sm' value='取消'>
+                                <input type='submit' class='btn btn-light btn-sm' value='確認修改'>
+                            </div>
+                            
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>                            
+        </div>   
+    </div>
+
+</div>
+{% endblock %}
+<!-- <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script> -->
+{% block scripts %}
+<script src="/static/scripts/jquery-3.3.1.min.js"></script>
+<!-- <script src="/static/scripts/jquery-ui.min.js"></script> -->
+<script>
+    $(function(){
+    //出入允许拖拽节点的父容器，一般是ul外层的容器
+        drag.init('body');
+      });
+    
+    //拖拽
+    var drag = {
+    
+      class_name : null,  //允许放置的容器
+      permitDrag : false, //是否允许移动标识
+    
+      _x : 0,             //节点x坐标
+      _y : 0,             //节点y坐标
+      _left : 0,          //光标与节点坐标的距离
+      _top : 0,           //光标与节点坐标的距离
+    
+      old_elm : null,     //拖拽原节点
+      tmp_elm : null,     //跟随光标移动的临时节点
+      new_elm : null,     //拖拽完成后添加的新节点
+    
+        //初始化
+        init : function (className){
+    
+          //允许拖拽节点的父容器的classname
+          drag.class_name = className;
+    
+          //监听鼠标按下事件，动态绑定要拖拽的节点（因为节点可能是动态添加的）
+          $('.' + drag.class_name).on('mousedown', '.card', function(event){
+              //当在允许拖拽的节点上监听到点击事件，将标识设置为可以拖拽
+              drag.permitDrag = true;
+              //获取到拖拽的原节点对象
+              drag.old_elm = $(this);
+              //执行开始拖拽的操作
+              drag.mousedown(event);
+              return false;
+            });
+    
+          //监听鼠标移动
+          $(document).mousemove(function(event){
+              //判断拖拽标识是否为允许，否则不进行操作
+              if(!drag.permitDrag) return false;
+              //执行移动的操作
+              drag.mousemove(event);
+              return false;
+            });
+    
+          //监听鼠标放开
+        //   $(document).mouseup(function(event){
+          $(document).on('mouseup', function(event){
+            //判断拖拽标识是否为允许，否则不进行操作
+            if(!drag.permitDrag) return false;
+            //拖拽结束后恢复标识到初始状态
+            drag.permitDrag = false;
+            //执行拖拽结束后的操作
+            drag.mouseup(event);
+            return false;
+          });
+        },
+    
+        //按下鼠标 执行的操作
+        mousedown : function (event){
+    
+        //1.克隆临时节点，跟随鼠标进行移动
+        drag.tmp_elm = $(drag.old_elm).clone();
+
+        //2.计算 节点 和 光标 的坐标
+        drag._x = $(drag.old_elm).offset().left;
+        drag._y = $(drag.old_elm).offset().top;
+
+        var e = event || window.event;
+        drag._left = e.pageX - drag._x;
+        drag._top = e.pageY - drag._y;
+
+        //3.修改克隆节点的坐标，实现跟随鼠标进行移动的效果
+        $(drag.tmp_elm).css({
+          'position' : 'fixed',
+          'left' : drag._x,
+          'top' : drag._y,
+          'background-color' : '#d2e9ff'
+        });
+        
+    
+        //4.添加临时节点
+        tmp = $(drag.old_elm).parent().append(drag.tmp_elm);
+        drag.tmp_elm = $(tmp).find(drag.tmp_elm);
+        $(drag.tmp_elm).css('cursor', 'move');
+    
+      },
+    
+        //移动鼠标 执行的操作
+        mousemove : function (event){
+    
+        //2.计算坐标
+        var e = event || window.event;
+        var x = e.pageX - drag._left;
+        var y = e.pageY - drag._top;
+        var maxL = $(document).width() - $(drag.old_elm).outerWidth();
+        var maxT = $(document).height() - $(drag.old_elm).outerHeight();
+        //不允许超出浏览器范围
+        x = x < 0 ? 0: x;
+        x = x > maxL ? maxL: x;
+        y = y < 0 ? 0: y;
+        y = y > maxT ? maxT: y;
+    
+        //3.修改克隆节点的坐标
+        $(drag.tmp_elm).css({
+          'left' : x,
+          'top' : y,
+        });
+    
+        //判断当前容器是否允许放置节点
+        $.each($('.' + drag.class_name + ' .inBlock'), function(index, value){
+            //获取容器的坐标范围 (区域)
+            var box_x = $(value).offset().left;     //容器左上角x坐标
+            var box_y = $(value).offset().top;      //容器左上角y坐标
+            var box_width = $(value).outerWidth();  //容器宽
+            var box_height = $(value).outerHeight();//容器高
+    
+            //给可以放置的容器加背景色
+            if(e.pageX > box_x && e.pageX < box_x+box_width && e.pageY > box_y && e.pageY < box_y+box_height){
+                
+                //判断是否不在原来的容器下（使用坐标进行判断：x、y任意一个坐标不等于原坐标，则表示不是原来的容器）
+                
+                if($(value).offset().left !== drag.old_elm.offset().left 
+                  || $(value).offset().top !== drag.old_elm.offset().top){
+    
+                  $(value).css('background-color', '#d0d0d0');
+              }
+            }else{
+                //恢复容器原背景色
+                $(value).css('background-color', '#dfe3e6');
+            }
+    
+          });
+    
+        },
+    
+        //放开鼠标 执行的操作
+        mouseup : function (event){
+        //移除临时节点
+        $(drag.tmp_elm).remove();
+    
+        //判断所在区域是否允许放置节点
+        var e = event || window.event;
+    
+        $.each($('.' + drag.class_name + ' .inBlock'), function(index, value){
+            //获取容器的坐标范围 (区域)
+            var box_x = $(value).offset().left;     //容器左上角x坐标
+            var box_y = $(value).offset().top;      //容器左上角y坐标
+            var box_width = $(value).outerWidth();  //容器宽
+            var box_height = $(value).outerHeight();//容器高
+    
+            //判断放开鼠标位置是否想允许放置的容器范围内
+            if(e.pageX > box_x && e.pageX < box_x-0+box_width && e.pageY > box_y && e.pageY < box_y-0+box_height){
+                
+                //判断是否不在原来的容器下（使用坐标进行判断：x、y任意一个坐标不等于原坐标，则表示不是原来的容器）
+                if($(value).offset().left !== drag.old_elm.parent().offset().left 
+                  || $(value).offset().top !== drag.old_elm.parent().offset().top){
+                    var st = $(value).attr('id')
+                    $.ajax({
+                        type:'put',
+                        url:'/api/memorf/'+drag.old_elm.attr('id').substring(4,)+'/',
+                        data:{'memoState':st}
+                    }).done(function(datas){
+                        var cb = $(drag.old_elm).parent('.cardblock')
+                        console.log(cb)
+                        // console.log(st)
+                        // console.log($('#bc'+st))
+                        $('#bc'+st).prepend(cb.clone())
+                        cb.remove()
+                        
+
+                        // location.reload()
+                      });
+
+                  }
+                }
+    
+          });
+    
+        },
+    
+      };
+</script>
+<script>
+    $(document).ready(function(){
+
+        // 點擊card標題
+        $('.blockCon').on('mousedown','i.fas',function(e){
+            $(this).parents('.card').children('.cardCon').toggle()
+            e.stopPropagation();
+        })
+        
+        // 新增按鈕
+        $('#createCard').click(function(){
+            $('#iF').toggle()
+            $('#iF').find(':text').focus();
+
+        })
+
+        // 更新按鈕
+        $('.blockCon').on('mousedown','input[name="update"]',function(e){
+            $(this).parents('.cardblock').children('.card').css('display','none')
+            $(this).parents('.cardblock').children('.manage').css('display','block')
+            e.stopImmediatePropagation();
+        })
+
+        
+        // 更新取消按鈕
+        $('.blockCon').on('click','input[name="cancel"]',function(e){
+            $(this).parents('.cardblock').children('.card').css('display','block')
+            $(this).parents('.cardblock').children('.manage').css('display','none')
+            e.stopImmediatePropagation();
+        })
+
+        // 取消表單事件
+        // $('.manage').mousedown(function(e){
+        //     e.stopImmediatePropagation();
+        // })
+
+        // 搜尋
+        $('#searchbtn').on('click',function(){
+            keyword = $('.searchtext').val()
+            if (keyword){
+                var search = false
+                $('.cardCon').css('display','none')
+                $.each($(".card"),function(key,value){
+                    if($(value).find('.cardTitle').html().search(keyword)>-1||
+                        $(value).find('div[name="content"]').html().search(keyword)>-1){
+                        $(value).children('.cardCon').css('display','block')
+                        search = true
+                    }
+                })
+                if (!search){
+                    alert('搜尋沒有結果')
+                }
+            }else{
+                alert('請輸入關鍵字')
+            }    
+        })         
+    })
+    
+    
+
+</script>
+{% endblock %}
