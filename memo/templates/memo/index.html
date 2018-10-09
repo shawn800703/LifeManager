@@ -135,45 +135,25 @@ textarea{
 {% endblock %}
 
 {% block left %}
-        <ul class="sidebar navbar-nav">
-            <li class="nav-item active">
-                <a class="nav-link" href="{% url 'base:index' %}">
-                    <i class="fa fa-fw fa-home"></i>
-                    <span>首頁</span>
-                </a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="{% url 'base:about' %}">
-                    <i class="fa fa-fw fa-rocket"></i>
-                    <span>關於</span>
-                </a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="{% url 'base:contact' %}">
-                    <i class="fa fa-fw fa-phone"></i>
-                    <span>聯絡</span></a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="{% url 'memo:index' %}">
-                    <i class="fa fa-fw fa-phone"></i>
-                    <span>代辦事項</span></a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="#">
-                    <i class="fa fa-fw fa-phone"></i>
-                    <span>家計簿</span></a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="#">
-                    <i class="fa fa-fw fa-phone"></i>
-                    <span>健康資訊</span></a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="#">
-                    <i class="fa fa-fw fa-phone"></i>
-                    <span>運動管理</span></a>
-            </li>
-        </ul>
+    <ul class="sidebar navbar-nav">
+        <li class="nav-item active">
+            <a class="nav-link" href="{% url 'base:index' %}">
+                <i class="fa fa-fw fa-home"></i>
+                <span>首頁</span>
+            </a>
+        </li>
+
+        <li class="nav-item active">
+            <a class="nav-link" href="{% url 'memo:index' %}">
+                <i class="fa fa-fw fa-phone"></i>
+                <span>待辦事項</span></a>
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="{% url 'memo:archive' %}">
+                <i class="fa fa-fw fa-phone"></i>
+                <span>封存</span></a>
+        </li>
+    </ul>
 {% endblock %}
 
 {% block main %}
@@ -207,6 +187,7 @@ textarea{
                                 <div name='content'>{{ memo.memoContent }}</div>
                                 <div style="text-align: right">
                                     <p>{{ memo.expiredate }}</p>
+                                    <input id='archive{{ memo.memoID }}' name='archive' type="button" class="btn btn-light btn-sm" value='封存'>
                                     <input name='update' type="button" class="btn btn-light btn-sm" value='修改'>
                                     <input id='delete{{ memo.memoID }}' name='delete' type="button" class="btn btn-light btn-sm" value='刪除'>
                                 </div>
@@ -222,6 +203,7 @@ textarea{
                                         <option value='t' selected>代辦</option>
                                         <option value='d'>進行中</option>
                                         <option value='f'>完成</option>
+                                        <option value='a'>封存</option>
                                     </select>
                                     <label>預計完成日期</label>
                                     <input type="date" name='expiredate' value="{{ memo.expiredate|date:'Y-m-d' }}">
@@ -251,6 +233,7 @@ textarea{
                                 <input type="date" name='createED'>
                             </div>
                             <div style='text-align: right'>
+                                <input id='iFcancel' type='button' class='btn btn-light btn-sm' value='取消'>
                                 <input id='createbtn' type='submit' class="btn btn-light btn-sm" value='送出'>
                             </div>
                         </form>
@@ -278,6 +261,7 @@ textarea{
                                 <div name='content'>{{ memo.memoContent }}</div>
                                 <div style="text-align: right">
                                     <p>{{ memo.expiredate }}</p>
+                                    <input id='archive{{ memo.memoID }}' name='archive' type="button" class="btn btn-light btn-sm" value='封存'>
                                     <input name='update' type="button" class="btn btn-light btn-sm" value='修改'>
                                     <input id='delete{{ memo.memoID }}' name='delete' type="button" class="btn btn-light btn-sm" value='刪除'>
                                 </div>
@@ -293,6 +277,7 @@ textarea{
                                         <option value='t'>代辦</option>
                                         <option value='d' selected>進行中</option>
                                         <option value='f'>完成</option>
+                                        <option value='a'>封存</option>
                                     </select>
                                     <label>預計完成日期</label>
                                     <input type="date" name='expiredate' value="{{ memo.expiredate|date:'Y-m-d' }}">
@@ -329,6 +314,7 @@ textarea{
                             <div name='content'>{{ memo.memoContent }}</div>
                             <div style="text-align: right">
                                 <p>{{ memo.expiredate }}</p>
+                                <input id='archive{{ memo.memoID }}' name='archive' type="button" class="btn btn-light btn-sm" value='封存'>
                                 <input name='update' type="button" class="btn btn-light btn-sm" value='修改'>
                                 <input id='delete{{ memo.memoID }}' name='delete' type="button" class="btn btn-light btn-sm" value='刪除'>
                             </div>
@@ -344,6 +330,7 @@ textarea{
                                     <option value='t'>代辦</option>
                                     <option value='d'>進行中</option>
                                     <option value='f' selected>完成</option>
+                                    <option value='a'>封存</option>
                                 </select>
                                 <label>預計完成日期</label>
                                 <input type="date" name='expiredate' value="{{ memo.expiredate|date:'Y-m-d' }}">
@@ -549,46 +536,52 @@ textarea{
 </script>
 <script>
     $(document).ready(function(){
+        var blockCon = $('.blockCon')
 
         // 點擊card標題
-        $('.blockCon').on('mousedown','i.fas',function(e){
+        blockCon.on('mousedown','i.fas',function(e){
             $(this).parents('.card').children('.cardCon').toggle()
             e.stopPropagation();
         })
         
         // 新增按鈕
         $('#createCard').click(function(){
-            $('#iF').toggle()
+            $('#iF').css('display','block')
             $('#iF').find(':text').focus();
 
         })
-        // 新增送出
-        // $('#createbtn').click(function(e){
-        //     cb = $(this).parents('form')
-        //     $.ajax({
-        //         type:'post',
-        //         url:'/api/memorf/',
-        //         data:{'memoTitle':cb.find('input[name="createTit"]').val(),
-        //               'memoContent':cb.find('textarea').val(),
-        //               'memoState':'t',
-        //               'expiredate':cb.find('input[name="createED"]').val()
-        //               }
-        //         })
 
-        //     })
+         // 新增取消
+        $('#iF').find('#iFcancel').click(function(){
+            $('#iF').css('display','none')
+        })
 
         // 修改按鈕
-        $('.blockCon').on('mousedown','input[name="update"]',function(e){
+        blockCon.on('mousedown','input[name="update"]',function(e){
             $(this).parents('.cardblock').children('.card').css('display','none')
             $(this).parents('.cardblock').children('.manage').css('display','block')
             e.stopImmediatePropagation();
         })
 
+        // 封存按鈕
+        blockCon.on('mousedown','input[name="archive"]',function(e){
+            var cb = $(this).parents('.cardblock')
+            console.log(cb)
+            $.ajax({
+                type:'put',
+                url:'/api/memorf/'+$(this).attr('id').substring(7,)+'/',
+                data:{"memoState":"a"}
+            }).done(function(datas){
+                cb.remove()                
+            });
+            e.stopImmediatePropagation();
+        })
+
         // 刪除按鈕
-        $('.blockCon').on('mousedown','input[name="delete"]',function(e){
-            con = confirm('確認刪除?')
+        blockCon.on('mousedown','input[name="delete"]',function(e){
+            var con = confirm('確認刪除?')
             if (con){
-                cb = $(this).parents('.cardblock')
+                var cb = $(this).parents('.cardblock')
                 $.ajax({
                     type:'delete',
                     url:'/api/memorf/'+$(this).attr('id').substring(6,)+'/'
@@ -601,7 +594,7 @@ textarea{
 
         
         // 更新取消按鈕
-        $('.blockCon').on('click','input[name="cancel"]',function(e){
+        blockCon.on('click','input[name="cancel"]',function(e){
             $(this).parents('.cardblock').children('.card').css('display','block')
             $(this).parents('.cardblock').children('.manage').css('display','none')
             e.stopImmediatePropagation();

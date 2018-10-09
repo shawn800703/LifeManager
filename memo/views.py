@@ -28,10 +28,14 @@ def update(request,id):
     memo.memoTitle = request.POST['memoTitle']
     memo.memoContent = request.POST['memoContent']
     memo.memoState = request.POST['memoState']
-    
+
     if request.POST['expiredate']:
         memo.expiredate = request.POST['expiredate']
 
     memo.save()
+
     return redirect('/memo')
 
+def archive(request):
+    memoa = Memorf.objects.filter(memoState='a').order_by(F('expiredate').asc(nulls_last=True))
+    return render(request,'memo/archive.html',locals())

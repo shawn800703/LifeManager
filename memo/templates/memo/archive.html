@@ -1,0 +1,293 @@
+{% extends "base.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+<style>
+.searchtext{
+    border-radius: 10px;
+    margin-left: 24px;
+}
+.body{
+    /* border:1px red solid; */
+    width:100%;
+    height:85%;
+    position:fixed;
+    overflow-x: auto; 
+    display: flex;
+    flex-direction: row;
+}
+a{
+    text-decoration: none;
+}
+.mainblock{
+    /* border:1px red solid; */
+    margin:20px;
+    width:400px;
+    min-width: 400px;
+    display:inline-block;
+    /* vertical-align: top; */
+    box-sizing: border-box;
+}
+.inBlock{
+    /* border:1px red solid; */
+    background-color: #dfe3e6;
+    border-radius: 3px;
+    box-sizing: border-box;
+    max-height: 100%;
+    padding:4px;
+    display:flex;
+    flex-direction: column;
+}
+.cardblock{
+    /* border:1px red solid; */
+    width:100%;
+}
+.card{
+    /* border:1px red solid; */
+    background-color: #fff;
+    border-radius: 3px;
+    box-shadow: 0 1px 0 rgba(9,45,66,.25);
+    display: block;
+    padding:5px;
+    width: 100%;
+    margin-bottom: 5px;
+}
+.blockTi{
+    /* border:1px red solid; */
+    padding:0 4px;
+    line-height: 32px;
+    margin:8px 0;
+    width:100%;
+}
+.cardTi{
+    /* border:1px red solid; */
+    cursor:pointer;
+}
+.cardTitle{
+    /* border:1px red solid; */
+    display:inline-block;
+}   
+.blockCon{
+    /* border:1px red solid; */
+    overflow-x:hidden;
+    width:100%;
+    overflow-y: auto;
+}
+.cardCon{
+    display:none;
+}
+.iF{
+    display:none;
+}
+textarea{
+    resize:none;
+}
+.manage{
+    border-radius: 3px;
+    box-shadow: 0 1px 0 rgba(9,45,66,.25);
+    display:none;
+}
+.fas{
+    /* border:1px red solid; */
+    line-height: 24px;
+    float:right;
+}
+#custom-search-form {
+    margin:0;
+    margin-top: 5px;
+    padding: 0;
+}
+
+#custom-search-form .search-query {
+    padding-right: 3px;
+    padding-right: 4px \9;
+    padding-left: 3px;
+    padding-left: 4px \9;
+    /* IE7-8 doesn't have border-radius, so don't indent the padding */
+
+    margin-bottom: 0;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+
+#custom-search-form button {
+    border: 0;
+    background: none;
+    /** belows styles are working good */
+    padding: 2px 5px;
+    margin-top: 2px;
+    position: relative;
+    left: -28px;
+    /* IE7-8 doesn't have border-radius, so don't indent the padding */
+    margin-bottom: 0;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+
+.search-query:focus + button {
+    z-index: 3;   
+}
+</style>
+{% endblock %}
+
+{% block left %}
+    <ul class="sidebar navbar-nav">
+        <li class="nav-item active">
+            <a class="nav-link" href="{% url 'base:index' %}">
+                <i class="fa fa-fw fa-home"></i>
+                <span>首頁</span>
+            </a>
+        </li>
+
+        <li class="nav-item active">
+            <a class="nav-link" href="{% url 'memo:index' %}">
+                <i class="fa fa-fw fa-phone"></i>
+                <span>待辦事項</span></a>
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="{% url 'memo:archive' %}">
+                <i class="fa fa-fw fa-phone"></i>
+                <span>封存</span></a>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block main %}
+
+<div class='searchDiv'>
+    <form>
+        <div>
+            <input type="text" class="searchtext" placeholder="Search">
+            <img id='searchbtn'src='/static/images/search.png'>
+        </div>
+    </form>
+</div>
+<div class='body'>
+
+    <div class='mainblock'>
+        <div class='inBlock' id='t'>       
+            <div class='blockTi'>  
+                <span>封存</span>           
+            </div>
+            
+            <div class='blockCon' id='bct'>
+                {% for memo in memoa %}
+                    <div class='cardblock'>
+                        <div class='card' id='card{{ memo.memoID }}'>
+                            <div class='cardTi'>
+                                <p class='cardTitle'>{{ memo.memoTitle }}</p>    
+                                <i class="fas fa-stream"></i>
+                            </div>
+                            <div name='cardContent' class='cardCon'>
+                                <div name='content'>{{ memo.memoContent }}</div>
+                                <div style="text-align: right">
+                                    <p>{{ memo.expiredate }}</p>
+                                    <input name='update' type="button" class="btn btn-light btn-sm" value='修改'>
+                                    <input id='delete{{ memo.memoID }}' name='delete' type="button" class="btn btn-light btn-sm" value='刪除'>
+                                </div>
+                            </div>                        
+                        </div>
+                        <div class='manage'>
+                            <form method='POST' action='/memo/update/{{ memo.memoID }}'>
+                                {% csrf_token %}
+                                <div><input type='text' value='{{ memo.memoTitle }}' name='memoTitle' style='width:100%'></div>
+                                <div><textarea style='width:100%' name='memoContent'>{{ memo.memoContent }}</textarea></div>
+                                <div><select name='memoState'>
+                                        <option value='t'>代辦</option>
+                                        <option value='d'>進行中</option>
+                                        <option value='f'>完成</option>
+                                        <option value='a' selected>封存</option>
+                                    </select>
+                                    <label>預計完成日期</label>
+                                    <input type="date" name='expiredate' value="{{ memo.expiredate|date:'Y-m-d' }}">
+                                </div>
+                                <div style='text-align: right'>
+                                    <input name='cancel' type='button' class='btn btn-light btn-sm' value='取消'>
+                                    <input type='submit' class='btn btn-light btn-sm' value='確認修改'>
+                                </div>
+                                
+                            </form>
+                        </div>
+                    </div> 
+                    
+                {% endfor %}     
+            </div>
+        </div>        
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/scripts/jquery-3.3.1.min.js"></script>
+<script>
+    $(document).ready(function(){
+
+        // 點擊card標題
+        $('.blockCon').on('mousedown','i.fas',function(e){
+            $(this).parents('.card').children('.cardCon').toggle()
+            e.stopPropagation();
+        })
+        
+        // 修改按鈕
+        $('.blockCon').on('mousedown','input[name="update"]',function(e){
+            $(this).parents('.cardblock').children('.card').css('display','none')
+            $(this).parents('.cardblock').children('.manage').css('display','block')
+            e.stopImmediatePropagation();
+        })
+        
+
+        // 刪除按鈕
+        $('.blockCon').on('mousedown','input[name="delete"]',function(e){
+            con = confirm('確認刪除?')
+            if (con){
+                cb = $(this).parents('.cardblock')
+                $.ajax({
+                    type:'delete',
+                    url:'/api/memorf/'+$(this).attr('id').substring(6,)+'/'
+                }).done(function(datas){
+                    cb.remove()                
+                });
+                e.stopImmediatePropagation();
+            }else{e.stopImmediatePropagation();}
+        })
+
+        
+        // 更新取消按鈕
+        $('.blockCon').on('click','input[name="cancel"]',function(e){
+            $(this).parents('.cardblock').children('.card').css('display','block')
+            $(this).parents('.cardblock').children('.manage').css('display','none')
+            e.stopImmediatePropagation();
+        })
+
+
+
+        // 搜尋
+        $('#searchbtn').on('click',function(){
+            keyword = $('.searchtext').val()
+            if (keyword){
+                var search = false
+                $('.cardCon').css('display','none')
+                $.each($(".card"),function(key,value){
+                    if($(value).find('.cardTitle').html().search(keyword)>-1||
+                        $(value).find('div[name="content"]').html().search(keyword)>-1){
+                        $(value).children('.cardCon').css('display','block')
+                        search = true
+                    }
+                })
+                if (!search){
+                    alert('搜尋沒有結果')
+                }
+            }else{
+                alert('請輸入關鍵字')
+            }    
+        })         
+    })
+    
+    
+
+</script>
+{% endblock %}
