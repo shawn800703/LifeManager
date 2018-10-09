@@ -17,12 +17,19 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from memorf import views
-
+from limit import views as lview
+from sport import views as sview
 
 # Router
 router = DefaultRouter()
 
 router.register('memorf',views.MemorfViewSet)
+#limit
+router.register(r'user',lview.UserViewSet)
+router.register(r'userrole',lview.UserRoleViewSet)
+#sport
+router.register(r'sportitem',sview.SportItemViewSet)
+router.register(r'sportrecord',sview.SportRecordViewSet)
 
 
 # URL
@@ -30,5 +37,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
     path('', include('home.urls')),
-    path('memo/', include('memo.urls'))
+    path('memo/', include('memo.urls')),
+     path('limit/',include('limit.urls')),
+    path('sport/',include('sport.urls')),
 ]

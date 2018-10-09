@@ -40,7 +40,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'home',
     'memo',
-    'memorf'
+    'memorf',
+    'limit',
+    'sport',
 ]
 
 MIDDLEWARE = [

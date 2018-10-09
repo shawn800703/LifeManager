@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block styles %}
+<link rel="stylesheet" href="/static/styles/jquery-Datepicker.css">
+{% endblock %}
+{% block left%}
+<!-- Sidebar -->
+<ul class="sidebar navbar-nav">
+  <li class="nav-item active">
+      <a class="nav-link" href="{% url 'home:index' %}">
+          <i class="fa fa-fw fa-home"></i>
+          <span>首頁</span>
+      </a>
+  </li>
+  <li class="nav-item active">
+      <a class="nav-link" href="{% url 'sport:sportrecord' %}">
+          <i class="fa fa-fw fa-walking"></i>
+          <span>運動紀錄</span></a>
+  </li>
+  <li class="nav-item active">
+      <a class="nav-link" href="{% url 'sport:sportitem' %}">
+          <i class="fa fa-fw fa-free-code-camp"></i>
+          <span>運動消耗熱量資訊</span></a>
+  </li>
+  <li class="nav-item active">
+      <a class="nav-link" href="{% url 'sport:chartpie' %}">
+          <i class="fa fa-fw fa-chart-pie"></i>
+          <span>運動報表</span></a>
+  </li>
+</ul>
+{% endbolock %}
+{% block main %}
+<div class="card mb-3">
+    <div class="card-header">
+      <i class="fas fa-chart-pie"></i>
+        運動Pie Chart
+    </div>
+    
+    <div class="card-body">
+      <div>
+          <span id="date-label-from">運動開始時間:</span><input class="date" type="text" id="s_date" />
+          <span id="date-label-to">&sim;運動結束時間:<input class="date" type="text" id="e_date" />
+          <br/>
+      </div>
+      <canvas id="myPieChart" width="200px" height="100"></canvas>
+    </div>
+    <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+{% load static %}
+<script src="{% static 'scripts/Chart.min.js' %}"></script>
+<script src="{% static 'scripts/moment.min.js' %}"></script>
+<script src="{% static 'scripts/jquery-Datepicker.js' %}"></script>
+<script src="../../static/scripts/sportChartPie.js"></script>
+<script type="text/javascript">
+  // using jQuery
+  var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+</script>
+{% endblock %}
