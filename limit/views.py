@@ -101,6 +101,8 @@ def login(request):
         path = request.GET["url"]
     else:
         path = "/"
+    if(path == "limit/login/"):
+        path = "/"
     
     if request.method =="POST":
         email = request.POST["email"]
@@ -109,11 +111,14 @@ def login(request):
         if(request.POST["captcha"] == request.session["captcha"]):
             remember = "0"
             users = User.objects.filter(email = email, password = password).values("name","id")
-       
+       #$('#username').text('{0}，您好')
+        #        $('#limit > a').removeAttr('hidden')
             if users :
                 name = users[0]["name"]
                 request.session["userid"] = users[0]["id"]
-                response = HttpResponse("<script>alert('{0}歡迎回來');location.href = '{1}'</script>".format(name,path))
+                response = HttpResponse("""<script>
+                alert('{0}歡迎回來');
+                location.href = '{1}';</script>""".format(name,path))
                
                 if "remember" in request.POST.keys() :
                     enddate = datetime.datetime.now() + datetime.timedelta(days=7)
