@@ -2,11 +2,11 @@
 {% block styles %}
 <link rel="stylesheet" href="/static/styles/jquery-Datepicker.css">
 {% endblock %}
-{% block left%}
+{% block left %}
 <!-- Sidebar -->
 <ul class="sidebar navbar-nav">
   <li class="nav-item active">
-      <a class="nav-link" href="{% url 'home:index' %}">
+      <a class="nav-link" href="{% url 'base:index' %}">
           <i class="fa fa-fw fa-home"></i>
           <span>首頁</span>
       </a>
@@ -27,7 +27,7 @@
           <span>運動報表</span></a>
   </li>
 </ul>
-{% endbolock %}
+{% endblock %}
 {% block main %}
 <div class="card mb-3">
   <div class="card-header">
