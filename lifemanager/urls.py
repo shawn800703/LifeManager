@@ -16,14 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from memorf import views
+from memorf import views as mviews
 from limit import views as lview
 from sport import views as sview
 
 # Router
 router = DefaultRouter()
 
-router.register('memorf',views.MemorfViewSet)
+router.register(r'memorf',mviews.MemorfViewSet)
 #limit
 router.register(r'user',lview.UserViewSet)
 router.register(r'userrole',lview.UserRoleViewSet)

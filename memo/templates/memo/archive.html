@@ -12,8 +12,8 @@
 .body{
     /* border:1px red solid; */
     width:100%;
-    height:85%;
-    position:fixed;
+    height:800px;
+    position:relative;
     overflow-x: auto; 
     display: flex;
     flex-direction: row;
@@ -94,43 +94,7 @@ textarea{
     line-height: 24px;
     float:right;
 }
-#custom-search-form {
-    margin:0;
-    margin-top: 5px;
-    padding: 0;
-}
 
-#custom-search-form .search-query {
-    padding-right: 3px;
-    padding-right: 4px \9;
-    padding-left: 3px;
-    padding-left: 4px \9;
-    /* IE7-8 doesn't have border-radius, so don't indent the padding */
-
-    margin-bottom: 0;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-}
-
-#custom-search-form button {
-    border: 0;
-    background: none;
-    /** belows styles are working good */
-    padding: 2px 5px;
-    margin-top: 2px;
-    position: relative;
-    left: -28px;
-    /* IE7-8 doesn't have border-radius, so don't indent the padding */
-    margin-bottom: 0;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-}
-
-.search-query:focus + button {
-    z-index: 3;   
-}
 </style>
 {% endblock %}
 
@@ -145,12 +109,12 @@ textarea{
 
         <li class="nav-item active">
             <a class="nav-link" href="{% url 'memo:index' %}">
-                <i class="fa fa-fw fa-phone"></i>
+                <i class="fa fa-fw fa-list"></i>
                 <span>待辦事項</span></a>
         </li>
         <li class="nav-item active">
             <a class="nav-link" href="{% url 'memo:archive' %}">
-                <i class="fa fa-fw fa-phone"></i>
+                <i class="fa fa-fw fa-archive"></i>
                 <span>封存</span></a>
         </li>
     </ul>
@@ -162,7 +126,7 @@ textarea{
     <form>
         <div>
             <input type="text" class="searchtext" placeholder="Search">
-            <img id='searchbtn'src='/static/images/search.png'>
+            <img style='cursor:pointer;' id='searchbtn'src='/static/images/search.png'>
         </div>
     </form>
 </div>
@@ -290,3 +254,4 @@ textarea{
     
 
 </script>
+{% endblock %}

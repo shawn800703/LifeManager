@@ -82,9 +82,9 @@ WSGI_APPLICATION = 'lifemanager.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'lifemgr',
-        'USER': 'lifemgr',
-        'PASSWORD': 'lifemgr',
+        'NAME': 'lifemanager',
+        'USER': 'root',
+        'PASSWORD': 'root',
         'HOST': 'localhost',
         'PORT': '3306',
     }

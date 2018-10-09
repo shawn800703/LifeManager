@@ -1,7 +1,8 @@
 from django.db import models
+from limit.models import User
 
 class Memorf(models.Model):
-    # cuser = models.ForeignKey(user,models.DO_NOTHING,db_column='id')
+    cuser = models.ForeignKey(User,models.DO_NOTHING,verbose_name ='建立人員',null=True)
     memoID = models.AutoField(primary_key=True)
     memoTitle = models.CharField(max_length=40,null=True)
     memoContent = models.CharField(max_length=300,null=True,blank=True)
