@@ -19,6 +19,7 @@ from rest_framework.routers import DefaultRouter
 from memorf import views as mviews
 from limit import views as lview
 from sport import views as sview
+from on_accountapi import views as oaview
 
 # Router
 router = DefaultRouter()
@@ -30,7 +31,8 @@ router.register(r'userrole',lview.UserRoleViewSet)
 #sport
 router.register(r'sportitem',sview.SportItemViewSet)
 router.register(r'sportrecord',sview.SportRecordViewSet)
-
+# on_accountapi
+router.register(r'on_accountapi',oaview.On_AccountapiViewSet)
 
 # URL
 urlpatterns = [
@@ -38,6 +40,7 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('', include('home.urls')),
     path('memo/', include('memo.urls')),
-     path('limit/',include('limit.urls')),
+    path('limit/',include('limit.urls')),
     path('sport/',include('sport.urls')),
+    path('on_account/', include('on_account.urls')),
 ]

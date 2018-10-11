@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'memorf',
     'limit',
     'sport',
+    'on_account',
+    'on_accountapi',
 ]
 
 MIDDLEWARE = [
