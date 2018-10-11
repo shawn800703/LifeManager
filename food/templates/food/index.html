@@ -30,12 +30,13 @@
             </a>
         </li>
     </ul>
-    
+
 {% endblock %}
 {% block main %}
 <div class="container">
-<h2>歡迎來到飲食部，請問要使用什麼功能</h2>
-<a href="{% url 'food:list'  %}" class="btn btn-info">食物查詢</a><hr>
+<h2>食神歸位</h2>
+<img src="/food/static/images/eatgod.gif" alt="">
+<a href="{% url 'food:list'  %}" class="btn btn-info">食物查詢</a>
 <a href="{% url 'food:record' %}" class="btn btn-info">飲食紀錄</a>   
 </div>
 {% endblock %}
