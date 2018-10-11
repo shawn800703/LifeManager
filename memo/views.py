@@ -95,3 +95,9 @@ def chartData(request,s_date,e_date):
     count = str([todoc, finish, archive, overdue])
     # count = json.dumps(count)
     return HttpResponse(count, content_type="text/plain")
+
+def chartPie(request):
+    if chklogin(request):
+        path = request.path
+        return HttpResponse("<script>alert('請先登入');location.href = '/limit/login?url={}'</script>".format(path))
+    return render(request, 'memo/memoChartPie.html')

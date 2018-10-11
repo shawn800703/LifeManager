@@ -26,6 +26,11 @@
                 <i class="fa fa-fw fa-archive"></i>
                 <span>封存</span></a>
         </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="{% url 'memo:chartpie' %}">
+                <i class="fa fa-fw fa-chart-pie"></i>
+                <span>統計圖表</span></a>
+        </li>
     </ul>
 {% endblock %}
 
@@ -90,24 +95,6 @@
                 {% endfor %}     
             </div>
         </div>        
-    </div>
-
-    <div class="card mb-3">
-        <div class="card-header">
-          <i class="fas fa-chart-pie"></i>
-            代辦事項Pie Chart
-        </div>
-        
-        <div class="card-body">
-          <div>
-              <span id="date-label-from">查詢開始時間:</span><input class="date" type="text" id="s_date" />
-              <span id="date-label-to">&sim;查詢結束時間:<input class="date" type="text" id="e_date" />
-              <br/>
-          </div>
-          <canvas id="myPieChart" width="200px" height="100"></canvas>
-        </div>
-        <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-      </div>
     </div>
 </div>
 {% endblock %}
