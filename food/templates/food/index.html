@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block styles %}
+{% endblock %}
+{% block title %}
+<a class="navbar-brand mr-1" href="{% url 'food:index' %}">
+    <i class="fa fa-fw fa-home"></i>健康資訊</a>
+{% endblock %}
+{% block left %}
+
+<ul class="sidebar navbar-nav">
+    <li class="nav-item active">
+        <a class="nav-link" href="{% url 'food:list' %}">
+            <i class="fa fa-fw fa-home"></i>
+            <span>食物查詢</span>
+        </a>
+    </li>
+    <li class="nav-item active">
+        <a class="nav-link" href="{% url 'food:record' %}">
+            <i class="fa fa-fw fa-rocket"></i>
+            <span>飲食紀錄</span>
+        </a>
+    </li>
+    <li class="nav-item active">
+        <a class="nav-link" href="{% url 'base:index' %}">
+            <i class="fa fa-fw fa-rocket"></i>
+            <span>回主頁</span>
+        </a>
+    </li>
+</ul>
+{% endblock %}
+{% block main %}
+<div class="container">
+<h2>歡迎來到飲食部，請問要使用什麼功能</h2>
+<a href="{% url 'food:list'  %}" class="btn btn-info">食物查詢</a><hr>
+<a href="{% url 'food:record' %}" class="btn btn-info">飲食紀錄</a>   
+</div>
+{% endblock %}
+{% block scripts %}
+{% endblock %}

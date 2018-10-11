@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'sport',
     'on_account',
     'on_accountapi',
+    'food',
+    'foodrestful',
 ]
 
 MIDDLEWARE = [
