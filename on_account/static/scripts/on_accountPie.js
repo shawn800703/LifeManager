@@ -2,6 +2,7 @@ window.onload = function () {
 
     $(document).ready(function () {
         piechart()
+        userid = ""
 
         // 抓取userid
         $.get("/on_account/catch/", function (data) {
@@ -35,6 +36,8 @@ window.onload = function () {
                 var otherMoney = 0;
                 var date;
 
+                console.log(datas)
+                console.log(userid)
 
                 for (var i = 0, max = datas.length; i < max; i++) {
                     if (userid == datas[i].userid) {

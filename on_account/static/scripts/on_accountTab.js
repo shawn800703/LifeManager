@@ -1,6 +1,6 @@
 $(document).ready(function () {
     checkmoney = false
-    userid = "0"
+    userid = ""
     
     // 抓取userid
     $.get("/on_account/catch/", function (data) {
