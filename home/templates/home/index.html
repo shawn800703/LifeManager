@@ -10,6 +10,11 @@
     display:inline-block;
     margin:20px;
 }
+.body{
+    width: 1400px;
+    height:758px;
+    background-image: url(static/images/bg.jpg)
+}
 </style>
 {% endblock %}
 
@@ -19,19 +24,13 @@
 
 
 {% block main %}
-<div class="card-body">
-    <div class="card mb-3">
-        <a href="{% url 'memo:index' %}"><img class="word" src="static/images/book.gif"></a>
-    </div>
-    <div class="card mb-3">
-        <a href="{% url 'on_account:index' %}"><img class="word" src="static/images/money.gif"></a>
-    </div>
-    <div class="card mb-3">
-        <a href="#"><img class="word" src="static/images/food.gif"></a>
-    </div>
-    <div class="card mb-3">
-        <a href="{% url 'sport:sportrecord' %}"><img class="word" src="static/images/ti.png"></a>
-    </div>
+<div class="card-body body">
+
+     
+        <a href="{% url 'memo:index' %}"><img class="word" src="static/images/book.png"></a>
+        <a href="{% url 'on_account:index' %}"><img class="word" src="static/images/wealth.png"></a>
+        <a href="#"><img class="word" src="static/images/food.png"></a>
+        <a href="{% url 'sport:sportrecord' %}"><img class="word" src="static/images/physic.png"></a>
 </div>
 {% endblock %}
 
