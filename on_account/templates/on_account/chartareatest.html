@@ -1,0 +1,243 @@
+{% extends 'base.html' %}
+
+{% block styles %}
+
+{% endblock %}
+
+{% block main %}
+<!-- <div class="container">
+	<div>
+		<select name="chartsel" id="chartsel">
+			<option value="piechart">圓餅圖</option>
+			<option value="columnchart">長條圖</option>
+		</select>
+		<select name="selmonth" id="selmonth">
+			<option value="-01T">一月</option>
+			<option value="-02T">二月</option>
+			<option value="-03T">三月</option>
+			<option value="-04T">四月</option>
+			<option value="-05T">五月</option>
+			<option value="-06T">六月</option>
+			<option value="-07T">七月</option>
+			<option value="-08T">八月</option>
+			<option value="-09T">九月</option>
+			<option value="-10T">十月</option>
+			<option value="-11T">十一月</option>
+			<option value="-12T">十二月</option>
+			<option value="21">上半年</option>
+			<option value="74">下半年</option>
+			<option value="95">整年</option>
+			<option value="all">全部</option>
+		</select>
+	</div> -->
+	<div id="chartContainer" style="height: 600px; width: 100%;">
+	</div>
+	<div class="card-body">
+		<canvas id="myPieChart" width="30%" height="100"></canvas>
+	  </div>
+<!-- </div> -->
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/scripts/Chart.min.js"></script>
+<script>
+// Set new default font family and font color to mimic Bootstrap's default styling
+Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+Chart.defaults.global.defaultFontColor = '#292b2c';
+
+// Pie Chart Example
+var ctx = document.getElementById("myPieChart");
+var myPieChart = new Chart(ctx, {
+  type: 'pie',
+  data: {
+    labels: ["Blue", "Red", "Yellow", "Green"],
+    datasets: [{
+      data: [12.21, 15.58, 11.25, 8.32],
+      backgroundColor: ['#007bff', '#dc3545', '#ffc107', '#28a745'],
+    }],
+  },
+});
+</script>
+
+<script type="text/javascript">
+// 	window.onload = function () {
+
+// 		$(document).ready(function () {
+// 			piechart()
+
+// 			$("#chartsel").change(function () {
+// 				var sel = $(this).val()
+// 				if (sel == "piechart") {
+// 					piechart()
+// 				}
+// 				else if (sel == "columnchart") {
+// 					columnchart()
+// 				}
+// 			})
+
+// 			// 圓餅圖
+// 			function piechart() {
+// 				console.log(`is piechart`)
+
+// 				// 取得資料
+// 				$.getJSON('/api/on_accountapi/', function (datas) {
+// 					// var incomeMoney = 0;
+// 					// var outlayMoney = 0;
+
+// 					$("#selmonth").change(function () {
+// 						var foodMoney = 0;
+// 						var clothesMoney = 0;
+// 						var liveMoney = 0;
+// 						var trafficMoney = 0;
+// 						var educateMoney = 0;
+// 						var recreationMoney = 0;
+// 						var otherMoney = 0;
+// 						var date;
+// 						var selmonth = $(this).val()
+// 						for (var i = 0, max = datas.length; i < max; i++) {
+// 							var date = datas[i].date
+// 							var redate = /\-\d{2}[T]/
+// 							var datere = date.match(redate)
+// 							console.log(`datere:${datere[0]}`)
+// 							console.log(`selmonth:${selmonth}`)
+// 							// 一到十二
+// 							if (datere[0] == selmonth) {
+// 								if (datas[i].spendtype == "食") {
+// 									foodMoney += parseInt(datas[i].money)
+// 								}
+// 								else if (datas[i].spendtype == "衣") {
+// 									clothesMoney += parseInt(datas[i].money)
+// 								}
+// 								else if (datas[i].spendtype == "住") {
+// 									liveMoney += parseInt(datas[i].money)
+// 								}
+// 								else if (datas[i].spendtype == "行") {
+// 									trafficMoney += parseInt(datas[i].money)
+// 								}
+// 								else if (datas[i].spendtype == "育") {
+// 									educateMoney += parseInt(datas[i].money)
+// 								}
+// 								else if (datas[i].spendtype == "樂") {
+// 									recreationMoney += parseInt(datas[i].money)
+// 								}
+// 								else if (datas[i].spendtype == "其他") {
+// 									otherMoney += parseInt(datas[i].money)
+// 								}
+// 							}
+
+// 							// 上半年&下半年
+// 							// else if (selmonth == "21"){
+
+// 							// }
+// 						}
+
+// 						// 圓餅圖參數設定
+// 						var chart = new CanvasJS.Chart("chartContainer", {
+// 							theme: "light1", // "light1", "light2", "dark1", "dark2"
+// 							exportEnabled: true,
+// 							animationEnabled: true,
+// 							title: {
+// 								text: "各類消費統計表"
+// 							},
+// 							data: [{
+// 								type: "pie",
+// 								startAngle: 25,
+// 								toolTipContent: "<b>{label}</b>: NT${y}",
+// 								showInLegend: "true",
+// 								legendText: "{label}",
+// 								indexLabelFontSize: 16,
+// 								indexLabel: "{label} - NT${y}",
+// 								dataPoints: [
+// 									{ y: foodMoney, label: "食" },
+// 									{ y: clothesMoney, label: "衣" },
+// 									{ y: liveMoney, label: "住" },
+// 									{ y: trafficMoney, label: "行" },
+// 									{ y: educateMoney, label: "育" },
+// 									{ y: recreationMoney, label: "樂" },
+// 									{ y: otherMoney, label: "其他" },
+// 								]
+// 							}]
+// 						});
+// 						chart.render();
+// 					})
+
+
+// 				})
+// 			}
+
+// 			// 長條圖
+// 			function columnchart() {
+// 				console.log(`is columnchart`)
+
+// 				// 取得資料
+// 				$.getJSON('/api/on_accountapi/', function (datas) {
+// 					// var incomeMoney = 0;
+// 					// var outlayMoney = 0;
+
+// 					var foodMoney = 0;
+// 					var clothesMoney = 0;
+// 					var liveMoney = 0;
+// 					var trafficMoney = 0;
+// 					var educateMoney = 0;
+// 					var recreationMoney = 0;
+// 					var otherMoney = 0;
+
+// 					for (var i = 0, max = datas.length; i < max; i++) {
+// 						if (datas[i].spendtype == "食") {
+// 							foodMoney += parseInt(datas[i].money)
+// 						}
+// 						else if (datas[i].spendtype == "衣") {
+// 							clothesMoney += parseInt(datas[i].money)
+// 						}
+// 						else if (datas[i].spendtype == "住") {
+// 							liveMoney += parseInt(datas[i].money)
+// 						}
+// 						else if (datas[i].spendtype == "行") {
+// 							trafficMoney += parseInt(datas[i].money)
+// 						}
+// 						else if (datas[i].spendtype == "育") {
+// 							educateMoney += parseInt(datas[i].money)
+// 						}
+// 						else if (datas[i].spendtype == "樂") {
+// 							recreationMoney += parseInt(datas[i].money)
+// 						}
+// 						else if (datas[i].spendtype == "其他") {
+// 							otherMoney += parseInt(datas[i].money)
+// 						}
+// 					}
+
+// 					// 長條圖參數設定
+// 					var chart = new CanvasJS.Chart("chartContainer", {
+// 						animationEnabled: true,
+// 						theme: "light2", // "light1", "light2", "dark1", "dark2"
+// 						title: {
+// 							text: "各類消費統計表"
+// 						},
+// 						axisY: {
+// 							title: "金額"
+// 						},
+// 						data: [{
+// 							type: "column",
+// 							showInLegend: true,
+// 							legendMarkerColor: "grey",
+// 							legendText: "消費類型",
+// 							toolTipContent: "<b>{label}</b>: NT${y}",
+// 							dataPoints: [
+// 								{ y: foodMoney, label: "食" },
+// 								{ y: clothesMoney, label: "衣" },
+// 								{ y: liveMoney, label: "住" },
+// 								{ y: trafficMoney, label: "行" },
+// 								{ y: educateMoney, label: "育" },
+// 								{ y: recreationMoney, label: "樂" },
+// 								{ y: otherMoney, label: "其他" },
+// 							]
+// 						}]
+// 					});
+// 					chart.render();
+// 				})
+// 			}
+// 		})
+// 	}
+// </script>
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+{% endblock %}
