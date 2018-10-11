@@ -1,101 +1,10 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block styles %}
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+<link rel="stylesheet" href="{% static 'styles/memocss.css' %}">
 
-<style>
-.searchtext{
-    border-radius: 10px;
-    margin-left: 24px;
-}
-.body{
-    /* border:1px red solid; */
-    width:100%;
-    height:800px;
-    position:relative;
-    overflow-x: auto; 
-    display: flex;
-    flex-direction: row;
-}
-a{
-    text-decoration: none;
-}
-.mainblock{
-    /* border:1px red solid; */
-    margin:20px;
-    width:400px;
-    min-width: 400px;
-    display:inline-block;
-    /* vertical-align: top; */
-    box-sizing: border-box;
-}
-.inBlock{
-    /* border:1px red solid; */
-    background-color: #dfe3e6;
-    border-radius: 3px;
-    box-sizing: border-box;
-    max-height: 100%;
-    padding:4px;
-    display:flex;
-    flex-direction: column;
-}
-.cardblock{
-    /* border:1px red solid; */
-    width:100%;
-}
-.card{
-    /* border:1px red solid; */
-    background-color: #fff;
-    border-radius: 3px;
-    box-shadow: 0 1px 0 rgba(9,45,66,.25);
-    display: block;
-    padding:5px;
-    width: 100%;
-    margin-bottom: 5px;
-}
-.blockTi{
-    /* border:1px red solid; */
-    padding:0 4px;
-    line-height: 32px;
-    margin:8px 0;
-    width:100%;
-}
-.cardTi{
-    /* border:1px red solid; */
-    cursor:pointer;
-}
-.cardTitle{
-    /* border:1px red solid; */
-    display:inline-block;
-}   
-.blockCon{
-    /* border:1px red solid; */
-    overflow-x:hidden;
-    width:100%;
-    overflow-y: auto;
-}
-.cardCon{
-    display:none;
-}
-.iF{
-    display:none;
-}
-textarea{
-    resize:none;
-}
-.manage{
-    border-radius: 3px;
-    box-shadow: 0 1px 0 rgba(9,45,66,.25);
-    display:none;
-}
-.fas{
-    /* border:1px red solid; */
-    line-height: 24px;
-    float:right;
-}
-
-</style>
 {% endblock %}
 
 {% block left %}
@@ -133,7 +42,7 @@ textarea{
 <div class='body'>
 
     <div class='mainblock'>
-        <div class='inBlock' id='t'>       
+        <div class='inBlock'>       
             <div class='blockTi'>  
                 <span>封存</span>           
             </div>
@@ -182,76 +91,37 @@ textarea{
             </div>
         </div>        
     </div>
+
+    <div class="card mb-3">
+        <div class="card-header">
+          <i class="fas fa-chart-pie"></i>
+            代辦事項Pie Chart
+        </div>
+        
+        <div class="card-body">
+          <div>
+              <span id="date-label-from">查詢開始時間:</span><input class="date" type="text" id="s_date" />
+              <span id="date-label-to">&sim;查詢結束時間:<input class="date" type="text" id="e_date" />
+              <br/>
+          </div>
+          <canvas id="myPieChart" width="200px" height="100"></canvas>
+        </div>
+        <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+      </div>
+    </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
 <script src="/static/scripts/jquery-3.3.1.min.js"></script>
-<script>
-    $(document).ready(function(){
-
-        // 點擊card標題
-        $('.blockCon').on('mousedown','i.fas',function(e){
-            $(this).parents('.card').children('.cardCon').toggle()
-            e.stopPropagation();
-        })
-        
-        // 修改按鈕
-        $('.blockCon').on('mousedown','input[name="update"]',function(e){
-            $(this).parents('.cardblock').children('.card').css('display','none')
-            $(this).parents('.cardblock').children('.manage').css('display','block')
-            e.stopImmediatePropagation();
-        })
-        
-
-        // 刪除按鈕
-        $('.blockCon').on('mousedown','input[name="delete"]',function(e){
-            con = confirm('確認刪除?')
-            if (con){
-                cb = $(this).parents('.cardblock')
-                $.ajax({
-                    type:'delete',
-                    url:'/api/memorf/'+$(this).attr('id').substring(6,)+'/'
-                }).done(function(datas){
-                    cb.remove()                
-                });
-                e.stopImmediatePropagation();
-            }else{e.stopImmediatePropagation();}
-        })
-
-        
-        // 更新取消按鈕
-        $('.blockCon').on('click','input[name="cancel"]',function(e){
-            $(this).parents('.cardblock').children('.card').css('display','block')
-            $(this).parents('.cardblock').children('.manage').css('display','none')
-            e.stopImmediatePropagation();
-        })
-
-
-
-        // 搜尋
-        $('#searchbtn').on('click',function(){
-            keyword = $('.searchtext').val()
-            if (keyword){
-                var search = false
-                $('.cardCon').css('display','none')
-                $.each($(".card"),function(key,value){
-                    if($(value).find('.cardTitle').html().search(keyword)>-1||
-                        $(value).find('div[name="content"]').html().search(keyword)>-1){
-                        $(value).children('.cardCon').css('display','block')
-                        search = true
-                    }
-                })
-                if (!search){
-                    alert('搜尋沒有結果')
-                }
-            }else{
-                alert('請輸入關鍵字')
-            }    
-        })         
-    })
-    
-    
-
+<script src="{% static 'scripts/memojs.js' %}"></script>
+<script src="{% static 'scripts/Chart.min.js' %}"></script>
+<script src="{% static 'scripts/moment.min.js' %}"></script>
+<script src="{% static 'scripts/jquery-Datepicker.js' %}"></script>
+<script src="{% static 'scripts/memoChartPie.js' %}"></script>
+<script type="text/javascript">
+  // using jQuery
+  var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
 </script>
+
 {% endblock %}

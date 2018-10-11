@@ -30,7 +30,7 @@ def index(request):
     memot = Memorf.objects.filter(memoState='t',cuser=userid).order_by(F('expiredate').asc(nulls_last=True))
     memod = Memorf.objects.filter(memoState='d',cuser=userid).order_by(F('expiredate').asc(nulls_last=True))
     memof = Memorf.objects.filter(memoState='f',cuser=userid).order_by(F('expiredate').asc(nulls_last=True))
-    user = User.objects.filter(id=userid)
+    user = User.objects.get(id=userid)
     today = datetime.date.today()
     
 
@@ -40,8 +40,9 @@ def index(request):
         expiredate = None
         if request.POST['createED']:
             expiredate = request.POST['createED']
-
-        Memorf.objects.create(memoTitle=memoTitle,memoContent=memoContent,expiredate=expiredate,memoState='t',cuser=user[0])
+        print(userid)
+        print(type(userid))
+        Memorf.objects.create(memoTitle=memoTitle,memoContent=memoContent,expiredate=expiredate,memoState='t',cuser=user)
         return redirect('/memo')
 
     return render(request,'memo/index.html',locals())
@@ -66,3 +67,31 @@ def archive(request):
     
     memoa = Memorf.objects.filter(memoState='a',cuser=userid).order_by(F('expiredate').asc(nulls_last=True))
     return render(request,'memo/archive.html',locals())
+
+# # function desc. : 個人運動紀錄 - 圖表
+# # parameter : id
+# # create user : Luffy Lin
+# # modify user : Luffy Lin
+# # modify date : 2018/09/27   
+def chartData(request,s_date,e_date):
+
+    userid = request.session["userid"]
+    user = User.objects.get(id=userid)
+    
+    # count = Memorf.objects.filter(cuser=userid, expiredate__range=(s_date, e_date)).values('memoState').annotate(dcount=Count('memoState')).values('memoState','dcount')
+    tasks = Memorf.objects.filter(cuser=user,expiredate__range=(s_date, e_date))
+
+    archive = Memorf.objects.filter(cuser=user,memoState='a',expiredate__range=(s_date, e_date)).count()
+    finish = Memorf.objects.filter(cuser=user,memoState='f',expiredate__range=(s_date, e_date)).count()
+    todo = tasks.exclude(memoState='f').exclude(memoState='a')
+   
+    today = datetime.date.today()
+    overdue = 0
+    for task in todo:
+        if task.expiredate < today:
+            overdue += 1
+    
+    todoc = todo.count() - overdue
+    count = str([todoc, finish, archive, overdue])
+    # count = json.dumps(count)
+    return HttpResponse(count, content_type="text/plain")

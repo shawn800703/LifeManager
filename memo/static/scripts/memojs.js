@@ -3,7 +3,7 @@ $(document).ready(function(){
 
     // 點擊card標題
     blockCon.on('mousedown','i.fas',function(e){
-        $(this).parents('.card').children('.cardCon').toggle()
+        $(this).parents('.card').children('.cardCon').slideToggle(500)
         e.stopPropagation();
     })
     
