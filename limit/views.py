@@ -25,6 +25,11 @@ class UserRoleViewSet(viewsets.ModelViewSet):
     queryset = UserRole.objects.all()
     serializer_class = UserRoleSerializer
 
+# function desc. : 確認是否已經登入
+# parameter : 
+# create user : Luffy Lin
+# modify user : Luffy Lin
+# modify date : 2018/10/07
 def chklogin(request):
     if('userid' in request.session):
         global userid
@@ -85,12 +90,14 @@ def user(request):
         user.gender = request.POST["gender"]
         user.password = request.POST["password"]
         
+        response = HttpResponse("<script>alert('修改成功');location.href = '/limit/user/'</script>")
+        response.set_cookie("name",user.name)#,expires=expires)
         user.save()
-        return HttpResponse("<script>alert('修改成功');location.href = '/limit/user/'</script>")
+        return response
     
     userinfo = User.objects.get(id = userid)
-    print(userinfo.birthday)
     return render(request,'limit/user.html',locals())
+
 # function desc. : 使用者登入
 # parameter : 
 # create user : Luffy Lin
@@ -101,8 +108,6 @@ def login(request):
         path = request.GET["url"]
     else:
         path = "/"
-    if(path == "limit/login/"):
-        path = "/"
     
     if request.method =="POST":
         email = request.POST["email"]
@@ -111,8 +116,6 @@ def login(request):
         if(request.POST["captcha"] == request.session["captcha"]):
             remember = "0"
             users = User.objects.filter(email = email, password = password).values("name","id")
-       #$('#username').text('{0}，您好')
-        #        $('#limit > a').removeAttr('hidden')
             if users :
                 name = users[0]["name"]
                 request.session["userid"] = users[0]["id"]

@@ -1,6 +1,10 @@
 $(document).ready(function () {
   
-  var table = $("#dataTable").DataTable();
+  var table = $("#dataTable").DataTable({ 
+    "ordering" : true, 
+    "columnDefs" : [{"targets":4, "type":"date"}], 
+    "order": [[ 3, "desc" ]]
+   });
 
   
   // function desc. :控制欄位只能輸入小數點與數字
