@@ -41,7 +41,7 @@ $(document).ready(function () {
             cdata = $.parseJSON(datas)
 
         colors =['#4efeb3','#97cbff','#eac100',' #ff5809']
-        $("#Pie").append('<canvas id="myPieChart" width="100%" height="100%"></canvas>')
+        $("#Pie").append('<canvas id="myPieChart" height="275"></canvas>')
         // Set new default font family and font color to mimic Bootstrap's default styling
         // Set new default font family and font color to mimic Bootstrap's default styling
         Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';

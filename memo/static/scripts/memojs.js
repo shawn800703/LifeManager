@@ -42,7 +42,7 @@ $(document).ready(function(){
 
     // 刪除按鈕
     blockCon.on('mousedown','input[name="delete"]',function(e){
-        var con = confirm('確認刪除?')
+        var con = confirm('是否確認刪除?')
         if (con){
             var cb = $(this).parents('.cardblock')
             $.ajax({
